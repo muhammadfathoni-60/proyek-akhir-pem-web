@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRAINS.LMS - Learning Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #0369a1;
+            --accent-color: #0ea5e9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card-course {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card-course:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.2);
+        }
+
+        .task-item {
+            padding: 12px;
+            background: white;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="min-h-screen bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md p-8">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-600 rounded-lg mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+                    BL
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800">BRAINS.LMS</h1>
+                <p class="text-gray-500">Learning Management System</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Email/NIM</label>
+                    <input type="text" id="username" placeholder="Masukkan email atau NIM" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <button type="button" onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg">
+                    Masuk
+                </button>
+            </form>
+
+            <div class="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-lg text-center text-sm text-gray-600">
+                <strong>Demo:</strong> Gunakan username & password apapun
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboardPage" class="hidden min-h-screen flex">
+        <!-- SIDEBAR -->
+        <aside class="w-64 bg-white border-r border-gray-200">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-blue-600 rounded text-white flex items-center justify-center font-bold">BL</div>
+                    <div>
+                        <h2 class="font-bold text-gray-800">BRAINS</h2>
+                        <p class="text-xs text-gray-500">Learning</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-6">
+                <div class="text-xs text-gray-500 font-bold uppercase mb-4">MENU</div>
+                <div onclick="switchPage('beranda')" class="p-3 rounded bg-blue-50 text-blue-600 font-semibold cursor-pointer mb-2 menuItem active">
+                    🏠 Beranda
+                </div>
+                <div onclick="switchPage('nilaiCpl')" class="p-3 rounded text-gray-700 font-semibold cursor-pointer mb-2 menuItem">
+                    📊 Nilai CPL
+                </div>
+            </nav>
+
+            <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200">
+                <button onclick="handleLogout()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-2 px-4 rounded">
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- TOP NAVBAR -->
+            <header class="bg-white border-b border-gray-200 p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 id="pageTitle" class="text-2xl font-bold text-gray-800">Beranda</h1>
+                        <p id="pageSubtitle" class="text-sm text-gray-500">Selamat datang</p>
+                    </div>
+                    <div class="text-right">
+                        <p id="studentName" class="font-semibold text-gray-800">Mahasiswa</p>
+                        <p class="text-xs text-gray-500">Tahun 2024/2025</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- BERANDA -->
+            <div id="berandaContent" class="p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Daftar Mata Kuliah</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="courseGrid">
+                    <!-- Courses akan di-generate -->
+                </div>
+            </div>
+
+            <!-- COURSE DETAIL -->
+            <div id="courseDetailContent" class="hidden p-8">
+                <button onclick="backToBeranda()" class="mb-6 text-blue-600 hover:text-blue-700 font-semibold">
+                    ← Kembali ke Beranda
+                </button>
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div id="courseIcon" class="text-5xl">💻</div>
+                        <div>
+                            <h2 id="courseTitle" class="text-3xl font-bold text-gray-800">Algoritma</h2>
+                            <p id="courseDosenDetail" class="text-gray-500">Dosen: -</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Daftar Tugas</h3>
+                    <div id="tasksList"></div>
+                </div>
+            </div>
+
+            <!-- NILAI CPL -->
+            <div id="nilaiCplContent" class="hidden p-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Nilai Capaian Pembelajaran</h2>
+                    <table class="w-full">
+                        <thead class="bg-blue-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left">No</th>
+                                <th class="px-4 py-2 text-left">Mata Kuliah</th>
+                                <th class="px-4 py-2 text-center">Nilai</th>
+                                <th class="px-4 py-2 text-center">Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nilaiTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ======================== DATA ========================
+        const coursesData = {
+            1: {
+                title: 'Algoritma & Pemrograman',
+                dosen: 'Dr. Budi Santoso',
+                icon: '💻',
+                tasks: [
+                    { title: 'Tugas 1: Pengenalan Algoritma', deadline: '2024-01-15', status: 'completed', score: 90 },
+                    { title: 'Tugas 2: Struktur Data Dasar', deadline: '2024-01-22', status: 'completed', score: 85 },
+                    { title: 'Tugas 3: Implementasi Array', deadline: '2024-01-29', status: 'pending' }
+                ]
+            },
+            2: {
+                title: 'Basis Data',
+                dosen: 'Prof. Siti Nurhaliza',
+                icon: '🗄️',
+                tasks: [
+                    { title: 'Tugas 1: Desain Database', deadline: '2024-01-10', status: 'completed', score: 88 },
+                    { title: 'Tugas 2: Query SQL', deadline: '2024-01-20', status: 'pending' }
+                ]
+            },
+            3: {
+                title: 'Web Development',
+                dosen: 'Hendra Wijaya, M.T',
+                icon: '🌐',
+                tasks: [
+                    { title: 'Tugas 1: HTML & CSS', deadline: '2024-01-12', status: 'completed', score: 92 },
+                    { title: 'Tugas 2: JavaScript', deadline: '2024-01-26', status: 'pending' }
+                ]
+            },
+            4: {
+                title: 'Kalkulus',
+                dosen: 'Dr. Ahmad Pratama',
+                icon: '📐',
+                tasks: [
+                    { title: 'Tugas 1: Limit', deadline: '2024-01-18', status: 'completed', score: 75 }
+                ]
+            },
+            5: {
+                title: 'Sistem Operasi',
+                dosen: 'Ir. Rina Susandi',
+                icon: '⚙️',
+                tasks: [
+                    { title: 'Tugas 1: Konsep OS', deadline: '2024-01-17', status: 'completed', score: 84 }
+                ]
+            },
+            6: {
+                title: 'Jaringan Komputer',
+                dosen: 'Dr. Fandi Kusuma',
+                icon: '🔗',
+                tasks: [
+                    { title: 'Tugas 1: Model OSI', deadline: '2024-01-19', status: 'completed', score: 81 }
+                ]
+            },
+            7: {
+                title: 'Keamanan Informasi',
+                dosen: 'Prof. Wahid Hasyim',
+                icon: '🔐',
+                tasks: [
+                    { title: 'Tugas 1: Fundamental', deadline: '2024-01-21', status: 'completed', score: 86 }
+                ]
+            }
+        };
+
+        // ======================== FUNGSI ========================
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && password) {
+                document.getElementById('studentName').textContent = username;
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('dashboardPage').classList.remove('hidden');
+                loadCourses();
+            } else {
+                alert('Masukkan username dan password!');
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Logout?')) {
+                document.getElementById('dashboardPage').classList.add('hidden');
+                document.getElementById('loginPage').classList.remove('hidden');
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function loadCourses() {
+            const grid = document.getElementById('courseGrid');
+            grid.innerHTML = '';
+            
+            Object.keys(coursesData).forEach(id => {
+                const course = coursesData[id];
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-lg shadow-md p-4 card-course cursor-pointer hover:shadow-lg';
+                card.onclick = () => showCourseDetail(id);
+                card.innerHTML = `
+                    <div class="text-3xl mb-2">${course.icon}</div>
+                    <h3 class="font-bold text-gray-800">${course.title}</h3>
+                    <p class="text-sm text-gray-500">${course.dosen}</p>
+                    <p class="text-xs text-gray-400 mt-2">${course.tasks.length} Tugas</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function showCourseDetail(courseId) {
+            const course = coursesData[courseId];
+            document.getElementById('berandaContent').classList.add('hidden');
+            document.getElementById('courseDetailContent').classList.remove('hidden');
+            document.getElementById('courseIcon').textContent = course.icon;
+            document.getElementById('courseTitle').textContent = course.title;
+            document.getElementById('courseDosenDetail').textContent = `Dosen: ${course.dosen}`;
+            document.getElementById('pageTitle').textContent = course.title;
+            document.getElementById('pageSubtitle').textContent = `Dosen: ${course.dosen}`;
+
+            const tasksList = document.getElementById('tasksList');
+            tasksList.innerHTML = '';
+            course.tasks.forEach(task => {
+                const taskEl = document.createElement('div');
+                taskEl.className = `task-item ${task.status === 'completed' ? 'completed' : ''}`;
+                taskEl.innerHTML = `
+                    <div class="flex justify-between">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">${task.title}</h4>
+                            <p class="text-sm text-gray-500">Deadline: ${task.deadline}</p>
+                            ${task.score ? `<p class="text-sm text-green-600">Nilai: ${task.score}</p>` : ''}
+                        </div>
+                        <span class="px-2 py-1 rounded text-xs font-bold ${task.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">
+                            ${task.status === 'completed' ? '✓ Selesai' : '⏳ Pending'}
+                        </span>
+                    </div>
+                `;
+                tasksList.appendChild(taskEl);
+            });
+        }
+
+        function backToBeranda() {
+            document.getElementById('courseDetailContent').classList.add('hidden');
+            document.getElementById('berandaContent').classList.remove('hidden');
+            document.getElementById('pageTitle').textContent = 'Beranda';
+            document.getElementById('pageSubtitle').textContent = 'Selamat datang';
+        }
+
+        function switchPage(page) {
+            document.querySelectorAll('.menuItem').forEach(el => el.classList.remove('active', 'bg-blue-50', 'text-blue-600'));
+            document.querySelectorAll('.menuItem').forEach(el => el.classList.add('text-gray-700'));
+            
+            document.getElementById('berandaContent').classList.add('hidden');
+            document.getElementById('courseDetailContent').classList.add('hidden');
+            document.getElementById('nilaiCplContent').classList.add('hidden');
+
+            if (page === 'beranda') {
+                document.getElementById('berandaContent').classList.remove('hidden');
+                document.getElementById('pageTitle').textContent = 'Beranda';
+                document.getElementById('pageSubtitle').textContent = 'Selamat datang';
+                event.target.classList.add('active', 'bg-blue-50', 'text-blue-600');
+            } else if (page === 'nilaiCpl') {
+                document.getElementById('nilaiCplContent').classList.remove('hidden');
+                document.getElementById('pageTitle').textContent = 'Nilai CPL';
+                document.getElementById('pageSubtitle').textContent = 'Nilai Capaian Pembelajaran';
+                event.target.classList.add('active', 'bg-blue-50', 'text-blue-600');
+                loadNilai();
+            }
+        }
+
+        function loadNilai() {
+            const nilaiData = [
+                { no: 1, mk: 'Algoritma & Pemrograman', nilai: 85, grade: 'A' },
+                { no: 2, mk: 'Basis Data', nilai: 78, grade: 'B+' },
+                { no: 3, mk: 'Web Development', nilai: 88, grade: 'A' },
+                { no: 4, mk: 'Kalkulus', nilai: 72, grade: 'B' },
+                { no: 5, mk: 'Sistem Operasi', nilai: 81, grade: 'B+' },
+                { no: 6, mk: 'Jaringan Komputer', nilai: 79, grade: 'B+' },
+                { no: 7, mk: 'Keamanan Informasi', nilai: 83, grade: 'A' }
+            ];
+
+            const table = document.getElementById('nilaiTable');
+            table.innerHTML = nilaiData.map(d => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-2">${d.no}</td>
+                    <td class="px-4 py-2">${d.mk}</td>
+                    <td class="px-4 py-2 text-center font-bold">${d.nilai}</td>
+                    <td class="px-4 py-2 text-center"><span class="px-2 py-1 rounded text-xs font-bold bg-blue-100 text-blue-700">${d.grade}</span></td>
+                </tr>
+            `).join('');
+        }
+    </script>
+
+</body>
+</html>

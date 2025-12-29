@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRAINS.LMS - Learning Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="min-h-screen hero-background flex items-center justify-center p-4 fade-in">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-8">
+            <!-- Logo -->
+            <div class="flex justify-center mb-6">
+                <div class="logo-placeholder">
+                    BL
+                </div>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">BRAINS.LMS</h1>
+            <p class="text-center text-gray-500 mb-8">Learning Management System</p>
+
+            <!-- Form Login -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Email/NIM</label>
+                    <input type="text" id="username" placeholder="Masukkan email atau NIM" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
+                    <input type="password" id="password" placeholder="Masukkan password" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+                    Masuk
+                </button>
+            </form>
+
+            <!-- Demo Info -->
+            <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p class="text-xs text-gray-600 text-center">
+                    <strong>Demo:</strong> Gunakan email dan password apapun untuk login
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div id="dashboardPage" class="hidden min-h-screen flex">
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="w-64 bg-white border-r border-gray-200 shadow-sm fixed h-screen overflow-y-auto transition-transform duration-300 ease-in-out">
+            <!-- Sidebar Header -->
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="logo-placeholder">BL</div>
+                    <div>
+                        <h2 class="font-bold text-gray-800">BRAINS</h2>
+                        <p class="text-xs text-gray-500">Learning Management</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="p-6">
+                <div class="text-xs text-gray-500 font-semibold uppercase mb-4">Menu Utama</div>
+                
+                <div class="sidebar-menu-item active" onclick="switchPage('beranda')">
+                    <span class="mr-3">🏠</span> Beranda
+                </div>
+                
+                <div class="sidebar-menu-item" onclick="switchPage('nilaiCpl')">
+                    <span class="mr-3">📊</span> Nilai CPL
+                </div>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 bg-white">
+                <button onclick="handleLogout()" 
+                    class="w-full bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-2 px-4 rounded-lg transition duration-200">
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main id="mainContent" class="flex-1 ml-64 overflow-y-auto">
+            <!-- TOP NAVBAR -->
+            <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
+                <div class="flex items-center justify-between px-8 py-4">
+                    <div>
+                        <h1 id="pageTitle" class="text-2xl font-bold text-gray-800">Beranda</h1>
+                        <p id="pageSubtitle" class="text-sm text-gray-500">Selamat datang di BRAINS.LMS</p>
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        <div class="text-right">
+                            <p id="studentName" class="text-sm font-semibold text-gray-800">Mahasiswa</p>
+                            <p class="text-xs text-gray-500">Akademik 2024/2025</p>
+                        </div>
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                            👤
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <div class="p-8">
+                <!-- BERANDA PAGE -->
+                <div id="berandaContent" class="fade-in">
+                    <!-- Section Header -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Daftar Mata Kuliah</h2>
+                        <p class="text-gray-500">Klik salah satu mata kuliah untuk melihat detail tugas</p>
+                    </div>
+
+                    <!-- Grid Mata Kuliah (7 Courses) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+                        <!-- Course 1 -->
+                        <div class="card-course bg-white p-6 rounded-lg shadow-md border border-gray-200" onclick="selectCourse(1, 'Algoritma & Pemrograman')">
+                            <div class="course-icon bg-purple-100 mb-4">💻</div>
+                            <h3 class="font-bold text-gray-800 mb-1">Algoritma & Pemrograman</h3>
+                            <p class="text-sm text-gray-500 mb-3">Dosen: Dr. Budi Santoso</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">3 SKS</span>
+                                <span class="text-xs text-gray-400">5 Tugas</span>
+                            </div>
+                        </div>
+
+                        <!-- Course 2 -->
+                        <div class="card-course bg-white p-6 rounded-lg shadow-md border border-gray-200" onclick="selectCourse(2, 'Basis Data')">
+                            <div class="course-icon bg-blue-100 mb-4">🗄️</div>
+                            <h3 class="font-bold text-gray-800 mb-1">Basis Data</h3>
+                            <p class="text-sm text-gray-500 mb-3">Dosen: Prof. Siti Nurhaliza</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">3 SKS</span>
+                                <span class="text-xs text-gray-400">4 Tugas</span>
+                            </div>
+                        </div>
+
+                        <!-- Course 3 -->
+                        <div class="card-course bg-white p-6 rounded-lg shadow-md border border-gray-200" onclick="selectCourse(3, 'Web Development')">
+                            <div class="course-icon bg-green-100 mb-4">🌐</div>
+                            <h3 class="font-bold text-gray-800 mb-1">Web Development</h3>
+                            <p class="text-sm text-gray-500 mb-3">Dosen: Hendra Wijaya, M.T</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">4 SKS</span>
+                                <span class="text-xs text-gray-400">6 Tugas</span>
+                            </div>
+                        </div>
+
+                        <!-- Course 4 -->
+                        <div class="card-course bg-white p-6 rounded-lg shadow-md border border-gray-200" onclick="selectCourse(4, 'Kalkulus')">
+                            <div class="course-icon bg-red-100 mb-4">📐</div>
+                            <h3 class="font-bold text-gray-800 mb-1">Kalkulus</h3>
+                            <p class="text-sm text-gray-500 mb-3">Dosen: Dr. Ahmad Pratama</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">4 SKS</span>
+                                <span class="text-xs text-gray-400">7 Tugas</span>
+                            </div>
+                        </div>
+
+                        <!-- Course 5 -->
+                        <div class="card-course bg-white p-6 rounded-lg shadow-md border border-gray-200" onclick="selectCourse(5, 'Sistem Operasi')">
+                            <div class="course-icon bg-yellow-100 mb-4">⚙️</div>
+                            <h3 class="font-bold text-gray-800 mb-1">Sistem Operasi</h3>
+                            <p class="text-sm text-gray-500 mb-3">Dosen: Ir. Rina Susandi</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">3 SKS</span>
+                                <span class="text-xs text-gray-400">5 Tugas</span>
+                            </div>
+                        </div>
+
+                        <!-- Course 6 -->
+                        <div class="card-course bg-white p-6 rounded-lg shadow-md border border-gray-200" onclick="selectCourse(6, 'Jaringan Komputer')">
+                            <div class="course-icon bg-indigo-100 mb-4">🔗</div>
+                            <h3 class="font-bold text-gray-800 mb-1">Jaringan Komputer</h3>
+                            <p class="text-sm text-gray-500 mb-3">Dosen: Dr. Fandi Kusuma</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">3 SKS</span>
+                                <span class="text-xs text-gray-400">4 Tugas</span>
+                            </div>
+                        </div>
+
+                        <!-- Course 7 -->
+                        <div class="card-course bg-white p-6 rounded-lg shadow-md border border-gray-200" onclick="selectCourse(7, 'Keamanan Informasi')">
+                            <div class="course-icon bg-pink-100 mb-4">🔐</div>
+                            <h3 class="font-bold text-gray-800 mb-1">Keamanan Informasi</h3>
+                            <p class="text-sm text-gray-500 mb-3">Dosen: Prof. Wahid Hasyim</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">3 SKS</span>
+                                <span class="text-xs text-gray-400">5 Tugas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COURSE DETAIL PAGE -->
+                <div id="courseDetailContent" class="hidden slide-in-left">
+                    <!-- Back Button -->
+                    <button onclick="backToBeranda()" class="mb-6 flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold">
+                        ← Kembali ke Beranda
+                    </button>
+
+                    <!-- Course Header -->
+                    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div id="courseIconLarge" class="course-icon text-4xl bg-blue-100">💻</div>
+                            <div>
+                                <h2 id="courseDetailTitle" class="text-3xl font-bold text-gray-800">Algoritma & Pemrograman</h2>
+                                <p id="courseDetailDosen" class="text-gray-500">Dosen: -</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <p class="text-gray-500 text-sm">SKS</p>
+                                <p class="text-2xl font-bold text-blue-600">3-4</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <p class="text-gray-500 text-sm">Total Tugas</p>
+                                <p id="totalTasksDisplay" class="text-2xl font-bold text-green-600">5</p>
+                            </div>
+                            <div class="bg-yellow-50 p-4 rounded-lg">
+                                <p class="text-gray-500 text-sm">Tugas Tertunda</p>
+                                <p id="pendingTasksDisplay" class="text-2xl font-bold text-yellow-600">2</p>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-lg">
+                                <p class="text-gray-500 text-sm">Tugas Selesai</p>
+                                <p id="completedTasksDisplay" class="text-2xl font-bold text-purple-600">3</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tasks List -->
+                    <div class="bg-white rounded-lg shadow-md p-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6">Daftar Tugas</h3>
+                        
+                        <div id="tasksList" class="space-y-3">
+                            <!-- Tasks will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NILAI CPL PAGE -->
+                <div id="nilaiCplContent" class="hidden fade-in">
+                    <div class="bg-white rounded-lg shadow-md p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Nilai Capaian Pembelajaran (CPL)</h2>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-blue-50 border-b-2 border-blue-200">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">No</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Mata Kuliah</th>
+                                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">SKS</th>
+                                        <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Nilai</th>
+                                        <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                        <td class="px-6 py-4 text-gray-700">1</td>
+                                        <td class="px-6 py-4 text-gray-700">Algoritma & Pemrograman</td>
+                                        <td class="px-6 py-4 text-gray-700">3</td>
+                                        <td class="px-6 py-4 text-center font-semibold text-gray-800">85</td>
+                                        <td class="px-6 py-4 text-center"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">A</span></td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                        <td class="px-6 py-4 text-gray-700">2</td>
+                                        <td class="px-6 py-4 text-gray-700">Basis Data</td>
+                                        <td class="px-6 py-4 text-gray-700">3</td>
+                                        <td class="px-6 py-4 text-center font-semibold text-gray-800">78</td>
+                                        <td class="px-6 py-4 text-center"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">B+</span></td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                        <td class="px-6 py-4 text-gray-700">3</td>
+                                        <td class="px-6 py-4 text-gray-700">Web Development</td>
+                                        <td class="px-6 py-4 text-gray-700">4</td>
+                                        <td class="px-6 py-4 text-center font-semibold text-gray-800">88</td>
+                                        <td class="px-6 py-4 text-center"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">A</span></td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                        <td class="px-6 py-4 text-gray-700">4</td>
+                                        <td class="px-6 py-4 text-gray-700">Kalkulus</td>
+                                        <td class="px-6 py-4 text-gray-700">4</td>
+                                        <td class="px-6 py-4 text-center font-semibold text-gray-800">72</td>
+                                        <td class="px-6 py-4 text-center"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-semibold">B</span></td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                        <td class="px-6 py-4 text-gray-700">5</td>
+                                        <td class="px-6 py-4 text-gray-700">Sistem Operasi</td>
+                                        <td class="px-6 py-4 text-gray-700">3</td>
+                                        <td class="px-6 py-4 text-center font-semibold text-gray-800">81</td>
+                                        <td class="px-6 py-4 text-center"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">B+</span></td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                        <td class="px-6 py-4 text-gray-700">6</td>
+                                        <td class="px-6 py-4 text-gray-700">Jaringan Komputer</td>
+                                        <td class="px-6 py-4 text-gray-700">3</td>
+                                        <td class="px-6 py-4 text-center font-semibold text-gray-800">79</td>
+                                        <td class="px-6 py-4 text-center"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">B+</span></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 text-gray-700">7</td>
+                                        <td class="px-6 py-4 text-gray-700">Keamanan Informasi</td>
+                                        <td class="px-6 py-4 text-gray-700">3</td>
+                                        <td class="px-6 py-4 text-center font-semibold text-gray-800">83</td>
+                                        <td class="px-6 py-4 text-center"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">A</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <p class="text-gray-700"><strong>IPK Sementara:</strong> <span class="text-blue-600 font-bold text-lg">3.52</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
