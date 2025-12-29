@@ -154,3 +154,76 @@ body {
         opacity: 1;
     }
 }
+
+/* ======================== AI CHATBOT STYLES ======================== */
+#aiChatWidget {
+    border: 1px solid #e5e7eb;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#aiChatMessages {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+#aiChatMessages::-webkit-scrollbar {
+    width: 6px;
+}
+
+#aiChatMessages::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+#aiChatMessages::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+#aiChatMessages::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.ai-message {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.user-message {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.ai-message div {
+    max-width: 85%;
+}
+
+.user-message div {
+    max-width: 85%;
+}
+
+/* Responsive - Hide chat on small screens */
+@media (max-width: 1024px) {
+    #aiChatWidget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 320px;
+        height: 400px;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+}
